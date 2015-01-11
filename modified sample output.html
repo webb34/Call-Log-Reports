@@ -1,0 +1,688 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Call logs</title>
+        <style>
+            @media screen, print{
+                *{
+                    padding: 0;
+                    margin: 0;
+                    font-family:Arial, Helvetica, sans-serif;
+                }
+                html, body{
+                    height:100%;
+                    margin: 0;
+                }
+                body, .page{
+                    background-color: #b3d4fc;
+                }
+                .page{
+                    width:100%;
+                    height:100%;
+                    text-align:center;
+                }
+                .sectionTitle {
+                    background-color:white;
+                    padding-top:20px;
+                    padding-bottom:20px;
+                    border-bottom:1px solid black;
+                }
+                .sectionTitleSmall {
+                    font-size:1.5em;
+                    background-color:white;
+                    padding-top:20px;
+                    text-align:center;
+                    border-bottom:1px solid black;
+                }
+                .disclaimer {
+                    font-size:.6em;
+                    background-color:white;
+                    padding-bottom:10px;
+                    border-bottom:1px solid black;
+                    text-align:center;
+                }
+                .caveats {
+                    background-color:white;
+                    text-align:left;
+                }
+                .cavTitle {
+                    font-size:0.8em;
+                    background-color:white;
+                    padding-left:20px;
+                }
+                #more-button {
+                    border-style:none;
+                    background:none;
+                }
+                #more-button {
+                    border-style:none;
+                    background:none;
+                }
+                .removedCol {
+                    font-size:.6em;
+                    background-color:white;
+                    padding-left:40px;
+                }
+                .sumTitle {
+                    background-color:white;
+                    padding:20px;
+                }
+                .orgSum .sumTitle {
+                    font-size:1.5em;
+                }
+                .deptSum .sumTitle {
+                    font-size:1.1em;
+                    padding:12px;
+                }
+                .pnSum .sumTitle {
+                    font-size:1.0em;
+                    padding:5px;
+                }
+                .deptSum .sumTitle p:hover, .pnSum .sumTitle p:hover, .tableTitle p:hover, .cavTitle p:hover {
+                    cursor:pointer;
+                    background-color:#b3d4fc;
+                }
+                .sumTable {
+                    width:100%;
+                }
+                .deptSum .sumTableDiv, .pnSum .sumTableDiv {
+                    padding-left:15px;
+                    padding-right:15px;
+                }
+                .content {
+                    padding-bottom:150px;
+                }
+                .logTable  td:first-child, .logTable  th:first-child, .orgSum td:first-child {
+                    border-left:hidden;
+                }
+                .logTable  td:last-child, .logTable  th:last-child, .orgSum td:last-child {
+                    border-right:hidden;
+                }
+                .tableTitle {
+                    font-size:2.0em;
+                    padding:20px;
+                }
+                table.sumTable td:nth-child(2) {
+                    width:200px;
+                }
+                table{
+                    border-collapse:collapse;
+                    margin: 0 auto;
+                    
+                }
+                table, th, td{
+                    border:1px solid black;
+                }
+                th{
+                    background-color: #B9CDE4;
+                }
+                tr:nth-child(odd){
+                    background-color: #DDECFE;
+                }
+                tr:nth-child(even){
+                    background-color: #CEE4FD;
+                }
+                th, td {
+                    width:auto;
+                    white-space:normal;
+                    padding-left:2px;
+                    padding-right:2px;
+                    padding-top:2px;
+                    padding-bottom:2px;
+                }
+                th.logTable, td.logtable {
+                    max-width:105px;
+                }
+                td {
+                    font-size: .9em;
+                }
+                .Date {
+                    max-width:75px;
+                }
+                .Time{
+                    max-width:60px;
+                }
+                .CallType {
+                    max-width:75px;
+                }
+                .CallingNumber, .CalledNumber {
+                    max-width:85px;
+                    overflow: auto;
+                }
+                .CallingDepartment, .CalledDepartment {
+                    max-width:105px;
+                }
+                .CallingExtension, .CalledExtension {
+                    max-width:80px;
+                }
+                .CallConnected {
+                    max-width:85px;
+                }
+                .Duration {
+                    max-width:70px;
+                }
+                .QueuingTime {
+                    max-width:70px;
+                }
+                .CarrierCode {
+                    max-width:55px;
+                }
+                .summaries{
+                    max-width:100%;
+                    text-align:left;
+                }
+            }
+            @media screen{
+                .content{
+                    display:inline-block;
+                    min-height:100%;
+                    min-width:900px;
+                    max-width:100%;
+                    background-color:white;
+                    border-left:1px solid black;
+                    border-right:1px solid black;
+                }
+                .sectionTitle {
+                    font-size:2.5em;
+                }
+                .grow {
+                    border-bottom:1px solid black;
+                    -moz-transition: height .1s;
+                    -ms-transition: height .1s;
+                    -o-transition: height .1s;
+                    -webkit-transition: height .1s;
+                    transition: height .1s;
+                    height: 0;
+                    overflow: hidden;
+                }
+            }
+            @media print{
+                .sectionTitleSmall {
+                    page-break-before:always;
+                }
+                .showHide {
+                    display:none;
+                }
+                .dataTable {
+                    display:none;
+                }
+                .caveats {
+                    display:none;
+                }
+                .disclaimer {
+                    display:none;
+                }
+                .sectionTitle {
+                    font-size:2.0em;
+                }
+                .deptSum .sumTitle {
+                    font-size:0.9em;
+                }
+                .orgSum .sumTitle {
+                    font-size:1.2em;
+                    padding:10px;
+                }
+                div.deptSum:nth-child(6n+6), div.pnSum:nth-child(7n+2) {
+                    page-break-after:always;
+                }
+            }
+        </style>
+        <script>
+            var browserName = "not IE";
+            var fullVersion = "doesn't matter";
+            function growDiv(event) {
+                var target = event.target || event.srcElement;
+                while(target.tagName.toUpperCase() != "SPAN"){
+                    target = target.children[0];
+                }
+                var span = target;
+                while(target.tagName.toUpperCase() != "DIV"){
+                    target = target.parentNode;
+                }
+                var parentDiv = target.parentNode;
+                if(browserName == "Microsoft Internet Explorer" && fullVersion < 10){
+                    var growDiv = parentDiv.querySelectorAll('.grow')[0];
+                } else {
+                    var growDiv = parentDiv.getElementsByClassName('grow')[0];
+                }
+                if (growDiv.clientHeight) {
+                    growDiv.style.height = 0;
+                } else {
+                    growDiv.style.height = growDiv.children[0].clientHeight + "px";
+                }
+                span.innerHTML=span.innerHTML=='Show '?'Hide ':'Show ';
+            }
+            function sortTable(event, column){
+                var table = event.target;
+                while(table.tagName.toUpperCase() != 'TABLE'){
+                    table = table.parentNode;
+                }
+                var tbl = table.tBodies[0];
+                var column = event.target.cellIndex;
+                var store = [];
+                for(var i=0, len=tbl.rows.length; i<len; i++){
+                    var row = tbl.rows[i];
+                    var sortnr = parseFloat(row.cells[column].textContent || row.cells[column].innerText);
+                    if(!isNaN(sortnr)) store.push([sortnr, row]);
+                }
+                store.sort();
+                for(var i=0, len=store.length; i<len; i++){
+                    tbl.appendChild(store[i][1]);
+                }
+                store = null;
+            }
+            window.onload=function(){
+                var nAgt = navigator.userAgent;
+                if ((verOffset=nAgt.indexOf("MSIE"))!=-1) {
+                    browserName = "Microsoft Internet Explorer";
+                    fullVersion = nAgt.substring(verOffset+5);
+                    fullVersion = fullVersion=fullVersion.substring(0,fullVersion.indexOf(";"));
+                    fullVersion = parseFloat(fullVersion);
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="page">
+            <div class="content">
+                <div class="sectionTitle">
+                    <p>Call Logs 09/23/2013-09/30/2013*</p>
+                </div>
+                <div class="disclaimer">
+                    <p>*WARNING: Some columns may be removed if they contain no entries.</p>
+                    <p>Some calls do not have associated departments due to no department being tied to them </p>
+                    <p>when the call was made. They are not included in their respective department, or</p>
+                    <p>oranization totals. But the calls are still summarized and in the data table.</p>
+                    <p>This issue only effects calls made before 9/26/2013.</p>
+                </div>
+<REPLACEME>
+                <div class="sectionTitle">
+                    <p>Summary</p>
+                </div>
+                <div class="summaries">
+                    <div id="CorporateSum" class="orgSum">
+                        <div class="sumTitle">
+                            <p>Corporate</p>
+                        </div>
+                        <div class="sumTableDiv">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>53h 12m 18s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>3h 31m 38s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>1837 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div1Sum" class="orgSum">
+                        <div class="sumTitle">
+                            <p>Div1</p>
+                        </div>
+                        <div class="sumTableDiv">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>61h 35m 49s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>3h 12m 5s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>1524 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div2Sum" class="orgSum">
+                        <div class="sumTitle">
+                            <p>Div2</p>
+                        </div>
+                        <div class="sumTableDiv">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>11h 9m 31s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 22m 29s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>206 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="ADSum" class="orgSum">
+                        <div class="sumTitle">
+                            <p>All Departments</p>
+                        </div>
+                        <div class="sumTableDiv">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>125h 57m 38s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>7h 6m 12s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>3567 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="UnknownSum" class="orgSum">
+                        <div class="sumTitle">
+                            <p>Unassociated Calls</p>
+                        </div>
+                        <div class="sumTableDiv">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>0h 0m 20s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 0m 0s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>1 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="sectionTitleSmall">
+                        <p>Departments</p>
+                    </div>
+                    <div id="AccountingSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Accounting</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>5h 31m 9s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 14m 58s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>141 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="AdministrationSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Administration</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>7h 41m 20s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 46m 20s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>477 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="CommunicationsSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Communications</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>4h 46m 20s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 23m 53s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>189 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="CompanyExecutiveStaffSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Company Executive Staff</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>4h 36m 1s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 12m 39s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>97 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="DeptDSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Dept D</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>4h 18m 51s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 11m 24s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>90 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="DistributionSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Distribution</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>5h 48m 36s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 20m 25s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>211 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div1AdministrativeSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div1 Administrative</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>10h 42m 34s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 40m 15s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>396 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div1Board&DirectorsSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div1 Board & Directors</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>6h 54m 49s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 16m 24s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>122 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div1DeptASum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div1 Dept A</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>12h 54m 17s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 26m 9s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>190 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div1DeptBSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div1 Dept B</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>20h 11m 47s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>1h 2m 44s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>484 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div1DeptCSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div1 Dept C</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>6h 33m 31s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 35m 9s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>242 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div2AdministrativeSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div2 Administrative</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>0h 39m 51s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 4m 2s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>45 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div2Board&DirectorSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div2 Board & Director</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>2h 1m 32s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 2m 15s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>36 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div2DeptASum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div2 Dept A</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>1h 41m 41s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 1m 31s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>9 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div2DeptBSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div2 Dept B</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>4h 48m 29s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 9m 0s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>70 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="Div2DeptCSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Div2 Dept C</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>1h 57m 58s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 5m 41s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>46 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="DocumentProcessingSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Document Processing</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>2h 55m 22s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 5m 19s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>47 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="HumanResourcesSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Human Resources</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>5h 6m 56s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 28m 23s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>218 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="ITSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>IT</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>2h 56m 39s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 12m 5s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>120 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="LegalSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Legal</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>1h 8m 42s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 4m 34s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>23 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="LibrarySum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Library</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>3h 57m 56s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 14m 51s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>136 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="ProductionSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Production</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>5h 38m 27s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 12m 36s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>99 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="ProjectsSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Projects</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>2h 11m 37s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 10m 35s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>48 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="ResearchSystems&WebsiteSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Research Systems & Website</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>0h 52m 53s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 5m 0s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>30 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="UnknownSum" class="deptSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>Unknown</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>0h 0m 20s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 0m 0s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>1 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="sectionTitleSmall">
+                        <p>Unassociated Calls*</p>
+                    </div>
+                    <div class="disclaimer">
+                        <p>*Only counts the calls made with numbers that had no associated department at the time of the call.</p>
+                    </div>
+                    <div id="999Sum" class="pnSum">
+                        <div class="sumTitle">
+                            <p onclick="growDiv(event)"><span class="showHide">Show </span>999</p>
+                        </div>
+                        <div class="sumTableDiv grow">
+                            <table class="sumTable">
+                                <tr><td>Total Calls Duration:</td><td>0h 0m 20s</td></tr>
+                                <tr><td>Total Queue Duration:</td><td>0h 0m 0s</td></tr>
+                                <tr><td>Total Calls Made:</td><td>1 calls</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
